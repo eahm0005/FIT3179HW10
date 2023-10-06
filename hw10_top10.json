@@ -1,0 +1,58 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": "Top 10 countries with the highest smoking population portion in 2012",
+    "data": { "url": "https://raw.githubusercontent.com/eahm0005/FIT3179HW10/main/smoking_DV2_editedregions.csv"},
+    "params": [{
+        "name": "Region_selection",
+        "bind": {
+             "input": "select",
+             "options": 
+             [null, 
+             "Asia",
+             "Africa",
+             "Americas",
+             "Europe",
+             "Oceania"],
+            "labels": [
+                "Show All",
+                "Asia",
+                "Africa",
+                "Americas",
+                "Europe",
+                "Oceania"
+            ],
+            "name": "Select Region: "}
+      }],
+    "transform": [
+      {"filter": "datum.Year == 2012"},
+      {"filter": "Region_selection == null || datum.Region == Region_selection"},
+      { 
+        "window": [{
+          "op": "rank",
+          "as": "rank"
+        }],
+        "sort": [{ "field": "PercentageTotal", "order": "descending" }]
+      }, {
+        "filter": "datum.rank <= 10"
+      }
+    ],
+    "encoding": {
+      "x": {
+          "field": "PercentageTotal",
+          "type": "quantitative",
+      },
+      "y": {
+          "field": "Country",
+          "type": "nominal",
+          "sort": "-x"
+      }
+    },
+    "layer": [{"mark": {"type": "bar", "color": {"value": "blue"}}}, 
+              {"mark": {"type": "text",
+                        "align": "left",
+                        "dx": 3},
+              "encoding":{"text": {"field": "PercentageTotal", 
+              "type":"quantitative",
+              "format": ".1f"}}
+            }] 
+  }
