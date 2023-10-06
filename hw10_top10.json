@@ -26,12 +26,12 @@
     "transform": [
       {"filter": "datum.Year == 2012"},
       {"filter": "Region_selection == null || datum.Region == Region_selection"},
-      { 
+      { "sort": [{"field": "PercentageTotal", "order": "descending"},
+                 {"field": "SmokersTotal", "order": "descending"}],
         "window": [{
           "op": "rank",
           "as": "rank"
-        }],
-        "sort": [{ "field": "PercentageTotal", "order": "descending" }]
+        }]
       }, {
         "filter": "datum.rank <= 10"
       }
@@ -39,20 +39,23 @@
     "encoding": {
       "x": {
           "field": "PercentageTotal",
-          "type": "quantitative",
+          "type": "quantitative"
       },
       "y": {
           "field": "Country",
           "type": "nominal",
           "sort": "-x"
       }
+      
     },
-    "layer": [{"mark": {"type": "bar", "color": {"value": "blue"}}}, 
+    "layer": [{"mark": "bar",
+                "encoding": {"color": {"value": "#ff4800"}}}, 
               {"mark": {"type": "text",
                         "align": "left",
                         "dx": 3},
-              "encoding":{"text": {"field": "PercentageTotal", 
-              "type":"quantitative",
-              "format": ".1f"}}
+                        "encoding":{"text": {"field": "PercentageTotal", 
+                                    "type":"quantitative",
+                                    "format": ".1f"},
+                                    "color": {"value": "#000000"}}
             }] 
   }
