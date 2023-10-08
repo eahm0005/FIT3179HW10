@@ -1,6 +1,6 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": "Percentage of Smokers Within Population per Country",
+    "title": "Percentage of Smokers Within Population per Country (2012)",
     "width": 800,
     "height": 500,
     "data": {
@@ -26,10 +26,10 @@
             "lookup": "properties.NAME",
             "from": {
               "data": {
-                "url": "https://raw.githubusercontent.com/eahm0005/FIT3179/main/smoking_DV2_editedregions.csv"
+                "url": "https://raw.githubusercontent.com/eahm0005/FIT3179HW10/main/smoking_DV2_editedregions.csv"
               },
               "key": "Country",
-              "fields": ["PercentageTotal"]
+              "fields": ["PercentageTotal", "SmokersTotal"]
             }
           }
         ],
@@ -47,7 +47,9 @@
           "tooltip": [
             {"field": "properties.NAME", "type": "nominal", "title": "Country"},
             {"field": "PercentageTotal", "type": "quantitative", 
-              "title": "Percentage of Smokers in Population", "format": ".1f"}
+              "title": "% of Smokers in Population", "format": ".1f"},
+            {"field": "SmokersTotal", "type": "quantitative", 
+              "title": "Amount of Smokers"}
           ]
         }
       }
