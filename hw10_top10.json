@@ -1,6 +1,6 @@
 {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "title": "Top 10 countries with the highest smoking population portion in 2012",
+    "title": "Top 10 countries with the highest smoking population portion (1980-2012)",
     "data": { "url": "https://raw.githubusercontent.com/eahm0005/FIT3179HW10/main/smoking_DV2_editedregions.csv"},
     "params": [{
         "name": "Region_selection",
@@ -22,37 +22,52 @@
                 "Oceania"
             ],
             "name": "Select Region: "}
-      }],
+      },
+      {"name": "Year_selection",
+       "value": 2012,
+       "bind": {
+          "input": "range",
+          "min": 1980,
+          "max": 2012,
+          "step": 1,
+          "name": "Select Year: "}}],
     "transform": [
-      {"filter": "datum.Year == 2012"},
+      {"filter": "datum.Year == Year_selection"},
       {"filter": "Region_selection == null || datum.Region == Region_selection"},
-      { "sort": [{"field": "PercentageTotal", "order": "descending"},
-                 {"field": "SmokersTotal", "order": "descending"}],
-        "window": [{
-          "op": "rank",
-          "as": "rank"
-        }]
-      }, {
-        "filter": "datum.rank <= 10"
-      }
+      {"window": [{
+        "field": "PercentageTotal",
+        "op": "rank",
+        "as": "rank"
+        }], 
+      "sort": [{"field": "PercentageTotal", "order": "descending"}]},
+      {"filter": "datum.rank <= 10"}
     ],
     "encoding": {
+      "color": {"field": "Region", "type":"nominal"},
       "x": {
+          "aggregate": "max", 
           "field": "PercentageTotal",
-          "type": "quantitative"
+          "type": "quantitative",
+          "title": "% of Smokers"
       },
       "y": {
           "field": "Country",
           "type": "nominal",
           "sort": "-x"
       }
-      
     },
-    "layer": [{"mark": "bar",
-                "encoding": {"color": {"value": "#ff4800"}}}, 
+    "layer": [{"mark": {"type": "bar"},
+                        "encoding": 
+                          {"tooltip": [{"field": "Country", "type":"nominal"},
+                                       {"field": "Year", "type": "ordinal"},
+                                       {"field": "PercentageTotal", "type": "quantitative",
+                                            "format": ".1f", "title": "% of Smokers"},
+                                       {"field": "SmokersTotal", "type": "quantitative", 
+                                            "title": "Total Smokers"}]}}, 
+
               {"mark": {"type": "text",
                         "align": "left",
-                        "dx": 3},
+                        "dx": 1},
                         "encoding":{"text": {"field": "PercentageTotal", 
                                     "type":"quantitative",
                                     "format": ".1f"},
